@@ -20,8 +20,8 @@ def signup(request):
             "username": data.get("username"),
             "email": data.get("email"),
             "prefix": data.get("prefix"),
-            "firstname": data.get("firstname"),
-            "lastname": data.get("lastname"),
+            "firstName": data.get("firstName"),
+            "lastName": data.get("lastName"),
             "role": data.get("role"),
             "password1": data.get("password1"),
             "password2": data.get("password2"),
@@ -36,19 +36,20 @@ def signup(request):
         message = "error"
     return JsonResponse({"message": message})
 
+@api_view(["GET"])
+def me(request):
+    return JsonResponse(
+        {
+            "id": request.user.id,
+            "username": request.user.username,
+            "email": request.user.email,
+            "firstName": request.user.firstName,
+            "lastName": request.user.lastName,
+            "role": request.user.role
+        }
+    )
 
 
-# @api_view(["GET"])
-# def userInfo(request):
-#     return JsonResponse({
-#         "id": request.user.id,
-#         "username": request.user.username,
-#         "firstname": request.user.firstname,
-#         "lastname": request.user.lastname,
-#         "email": request.user.email,
-#         "role": request.user.role,
-#         "prefix": request.user.prefix,
-#     })
     
 # change Password
 # @api_view(["POST"])
