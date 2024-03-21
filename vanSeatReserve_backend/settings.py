@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'van_re',
+    'Van_Seat_Reserve_Backend',
     'rest_framework',
 ]
 
@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-AUTH_USER_MODEL = 'van_re.CustomUser'
+AUTH_USER_MODEL = 'Van_Seat_Reserve_Backend.CustomUser'
 
 ROOT_URLCONF = 'vanSeReserve_backend.urls'
 
