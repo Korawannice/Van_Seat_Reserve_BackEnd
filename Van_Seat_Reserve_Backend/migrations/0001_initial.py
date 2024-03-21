@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
             name='CarDriver',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('car_number', models.CharField(max_length=50)),
+                ('van_number', models.CharField(max_length=50)),
                 ('number_of_seat', models.IntegerField(default=12)),
                 ('price_per_unit', models.FloatField()),
                 ('date', models.DateField()),
@@ -61,13 +61,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='CarReservation',
+            name='VanReservation',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('number_of_ticket', models.IntegerField()),
                 ('number_of_seat', models.IntegerField()),
                 ('is_confirmed', models.BooleanField(default=False)),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='van_re.cardriver')),
+                ('van', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Van_Seat_Reserve_Backend.vandriver')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('is_paid', models.BooleanField(default=False)),
-                ('reservation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='van_re.carreservation')),
+                ('reservation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Van_Seat_Reserve_Backend.vanreservation')),
             ],
         ),
     ]

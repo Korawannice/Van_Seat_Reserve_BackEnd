@@ -29,7 +29,7 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-## --- car_reservation ---
+## --- van_reservation ---
 
 class Locations(models.Model):
     
@@ -38,10 +38,10 @@ class Locations(models.Model):
     def __str__(self):
         return self.name
     
-class CarDriver(models.Model):
+class VanDriver(models.Model):
     
 
-    car_number = models.CharField(max_length=50)
+    van_number = models.CharField(max_length=50)
     driver = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     number_of_seat = models.IntegerField(default=12)
     price_per_unit = models.FloatField()
@@ -53,14 +53,14 @@ class CarDriver(models.Model):
     
     
     def __str__(self):
-        return self.car_number
+        return self.van_number
 
-class CarReservation(models.Model):
+class VanReservation(models.Model):
     number_of_ticket = models.CharField(max_length=10, unique=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE , related_name='user')
-    car = models.ForeignKey(CarDriver, on_delete=models.CASCADE, related_name='car')
+    van = models.ForeignKey(VanDriver, on_delete=models.CASCADE, related_name='van')
     number_of_seat = models.IntegerField()
-    amont_to_pay = models.FloatField()
+    amount_to_pay = models.FloatField()
     is_confirmed = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
@@ -70,13 +70,12 @@ class CarReservation(models.Model):
 
     def generate_number_of_ticket(self):
         number_of_ticket = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        while CarReservation.objects.filter(number_of_ticket=number_of_ticket).exists():
+        while VanReservation.objects.filter(number_of_ticket=number_of_ticket).exists():
             number_of_ticket = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         return number_of_ticket
 
 
 # class Payment(models.Model):
-#     reservation = models.ForeignKey(CarReservation, on_delete=models.CASCADE , related_name='reservation')
+#     reservation = models.ForeignKey(VanReservation, on_delete=models.CASCADE , related_name='reservation')
 #     amount = models.FloatField()
 #     is_paid = models.BooleanField(default=False)
-

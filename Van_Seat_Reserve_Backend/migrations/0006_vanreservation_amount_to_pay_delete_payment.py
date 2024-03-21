@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('van_re', '0005_alter_carreservation_number_of_ticket'),
+        ('van_re', '0005_alter_vanreservation_number_of_ticket'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='carreservation',
-            name='amont_to_pay',
+            model_name='vanreservation',
+            name='amount_to_pay',
             field=models.FloatField(default=1),
             preserve_default=False,
         ),

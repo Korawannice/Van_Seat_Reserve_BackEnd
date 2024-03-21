@@ -9,7 +9,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('van_re', '0003_payment_amount'),
+        ('Van_Seat_Reserve_Backend', '0003_payment_amount'),
     ]
 
     operations = [
@@ -20,18 +20,18 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AlterField(
-            model_name='carreservation',
-            name='car',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='car', to='van_re.cardriver'),
+            model_name='vanreservation',
+            name='van',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='van', to='Van_Seat_Reserve_Backend.vandriver'),
         ),
         migrations.AlterField(
-            model_name='carreservation',
+            model_name='vanreservation',
             name='user',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='payment',
             name='reservation',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reservation', to='van_re.carreservation'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reservation', to='Van_Seat_Reserve_Backend.vanreservation'),
         ),
     ]

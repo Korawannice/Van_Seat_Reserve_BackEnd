@@ -7,25 +7,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('van_re', '0001_initial'),
+        ('Van_Seat_Reserve_Backend', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cardriver',
+            model_name='vandriver',
             name='endRoute',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='end_route', to='van_re.locations'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='end_route', to='Van_Seat_Reserve_Backend.locations'),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='cardriver',
+            model_name='vandriver',
             name='is_available',
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='cardriver',
+            model_name='vandriver',
             name='startRoute',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='start_route', to='van_re.locations'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='start_route', to='Van_Seat_Reserve_Backend.locations'),
             preserve_default=False,
         ),
     ]

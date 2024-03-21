@@ -1,5 +1,5 @@
-from .models import CustomUser, CarDriver, CarReservation,  Locations
-from .serializers import RegisterSerializer, CarDriverSerializer, CarReservationSerializer, CarDriverListSerializer, LocationsSerializer, ResponseDriverCarSerializer, CarReservationListSerializer
+from .models import CustomUser, VanDriver, VanReservation,  Locations
+from .serializers import RegisterSerializer, VanDriverSerializer, VanReservationSerializer, VanDriverListSerializer, LocationsSerializer, ResponseDriverCarSerializer, VanReservationListSerializer
 from rest_framework import generics, permissions, exceptions
 from rest_framework.viewsets import ModelViewSet
 from .permissions import IsAdmin, IsDriver, IsUser
@@ -22,9 +22,6 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
 
-
-
-
 class ListLocations(generics.ListCreateAPIView):
     queryset = Locations.objects.all()
     serializer_class = LocationsSerializer
@@ -32,13 +29,13 @@ class ListLocations(generics.ListCreateAPIView):
 
 
 class ListCreateDriveRouteView(ModelViewSet):
-    queryset = CarDriver.objects.all()
-    serializer_class = CarDriverListSerializer
+    queryset = VanDriver.objects.all()
+    serializer_class = VanDriverListSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.role == 'admin' or self.request.user.role == 'user':
-            return CarDriver.objects.all()
+            return VanDriver.objects.all()
         
         else:
             raise PermissionDenied('Driver can not access this page')    
@@ -46,56 +43,56 @@ class ListCreateDriveRouteView(ModelViewSet):
 
 
 class CreateReservationAndViewTicket(generics.ListCreateAPIView):
-    queryset = CarReservation.objects.all()
-    serializer_class = CarReservationSerializer
+    queryset = VanReservation.objects.all()
+    serializer_class = VanReservationSerializer
     permission_classes = (IsAuthenticated, IsUser)
 
     def perform_create(self, serializer):
         user = self.request.user
-        car_id = self.request.data.get('car')
+        van_id = self.request.data.get('van')
         number_of_seat = int(self.request.data.get(
             'number_of_seat'))
-        car = CarDriver.objects.get(id=car_id)
+        van = VanDriver.objects.get(id=van_id)
 
-        amount_to_pay = car.price_per_unit * number_of_seat
+        amount_to_pay = van.price_per_unit * number_of_seat
 
-        if car.number_of_seat < number_of_seat:
+        if van.number_of_seat < number_of_seat:
             raise exceptions.ValidationError(
-                'Number of seat should be less than or equal to car seat')
-        serializer.save(user=user, amont_to_pay=amount_to_pay, car=car)
+                'Number of seat should be less than or equal to van seat')
+        serializer.save(user=user, amount_to_pay=amount_to_pay, van=van)
 
-        # Subtract number_of_seat from car.number_of_seat and save the car object
+        # Subtract number_of_seat from car.number_of_seat and save the van object
 
-        car.number_of_seat -= number_of_seat
-        # check if car number_of_seat is 0 then make is_available to False
-        if car.number_of_seat == 0:
-            car.is_available = False
+        van.number_of_seat -= number_of_seat
+        # check if van number_of_seat is 0 then make is_available to False
+        if van.number_of_seat == 0:
+            van.is_available = False
 
-        car.save()
+        van.save()
 
 
 class UserReservation(generics.ListCreateAPIView):
-    queryset = CarReservation.objects.all()
-    serializer_class = CarReservationSerializer
+    queryset = VanReservation.objects.all()
+    serializer_class = VanReservationSerializer
     permission_classes = (IsAuthenticated, IsUser)
 
     def perform_create(self, serializer):
         user = self.request.user
-        car = self.request.data.get('car')
+        van = self.request.data.get('van')
         number_of_seat = self.request.data.get('number_of_seat')
 
-        car = CarDriver.objects.get(id=car)
+        van = VanDriver.objects.get(id=van)
 
-        amount_to_pay = car.price_per_unit * number_of_seat
+        amount_to_pay = van.price_per_unit * number_of_seat
 
-        if car.number_of_seat < number_of_seat:
+        if van.number_of_seat < number_of_seat:
             raise exceptions.ValidationError(
-                'Number of seat should be less than or equal to car seat')
-        serializer.save(user=user, amont_to_pay=amount_to_pay, car=car)
+                'Number of seat should be less than or equal to van seat')
+        serializer.save(user=user, amount_to_pay=amount_to_pay, van=van)
 
     def get_queryset(self):
         user = self.request.user
-        return CarReservation.objects.filter(user=user)
+        return VanReservation.objects.filter(user=user)
 
 
 # ---- mockup -----
@@ -103,8 +100,8 @@ class UserReservation(generics.ListCreateAPIView):
 class QrCodeToTicketVerification(generics.RetrieveAPIView):
     # ...
 
-    queryset = CarReservation.objects.all()
-    serializer_class = CarReservationSerializer
+    queryset = VanReservation.objects.all()
+    serializer_class = VanReservationSerializer
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -141,7 +138,7 @@ class QrCodeToTicketVerification(generics.RetrieveAPIView):
 class MarkReservationAsSuccessful(APIView):
 
     def get(self, request, number_of_ticket, format=None):
-        reservation = CarReservation.objects.get(
+        reservation = VanReservation.objects.get(
             number_of_ticket=number_of_ticket)
         if reservation.is_confirmed:
             # return Response({'status': 'already confirmed'}, status=status.HTTP_400_BAD_REQUEST)
@@ -156,18 +153,18 @@ class MarkReservationAsSuccessful(APIView):
         # return Response({'status': 'success'}, status=status.HTTP_200_OK)
 
 
-class ListDriverReponse(generics.ListAPIView):
+class ListDriverResponse(generics.ListAPIView):
     serializer_class = ResponseDriverCarSerializer
     permission_classes = (IsAuthenticated, IsDriver)
 
     def get_queryset(self):
         user = self.request.user
-        return CarDriver.objects.filter(driver=user)
+        return VanDriver.objects.filter(driver=user)
 
 
 class RetrieveUpdateDestroyDriveRouteView(ModelViewSet):
-    queryset = CarDriver.objects.all()
-    serializer_class = CarDriverSerializer
+    queryset = VanDriver.objects.all()
+    serializer_class = VanDriverSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
 
     def perform_create(self, serializer):
@@ -200,24 +197,24 @@ class RetrieveUpdateDestroyDriveRouteView(ModelViewSet):
         instance.delete()
 
 
-class ListCreateCarReservationView(generics.ListCreateAPIView):
-    queryset = CarReservation.objects.all()
-    serializer_class = CarReservationListSerializer
+class ListCreateVanReservationView(generics.ListCreateAPIView):
+    queryset = VanReservation.objects.all()
+    serializer_class = VanReservationListSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.role == 'admin':
-            return CarReservation.objects.all()
+            return VanReservation.objects.all()
         elif self.request.user.role == 'user':
-            return CarReservation.objects.filter(user=self.request.user)
+            return VanReservation.objects.filter(user=self.request.user)
         elif self.request.user.role == 'driver':
             raise PermissionDenied('Driver can not access this page')
         else:
             raise PermissionDenied('User not found')
 
 
-class SerachCarDriver(generics.ListAPIView):
-    serializer_class = CarDriverSerializer
+class SearchVanDriver(generics.ListAPIView):
+    serializer_class = VanDriverSerializer
     permission_classes = [IsAuthenticated,]
 
     def get_queryset(self):
@@ -228,7 +225,7 @@ class SerachCarDriver(generics.ListAPIView):
         startRoute = get_object_or_404(Locations, name=startRoute)
         endRoute = get_object_or_404(Locations, name=endRoute)
 
-        queryset = CarDriver.objects.filter(
+        queryset = VanDriver.objects.filter(
             startRoute=startRoute, endRoute=endRoute)
 
         if date:

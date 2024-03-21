@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers , viewsets
-from .models import CustomUser , CarDriver , CarReservation , Locations
+from .models import CustomUser , VanDriver , VanReservation , Locations
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
@@ -43,7 +43,7 @@ class LocationsSerializer(serializers.ModelSerializer):
         model = Locations
         fields = ('id','name')
         
-class CarDriverSerializer(serializers.ModelSerializer):
+class VanDriverSerializer(serializers.ModelSerializer):
 
     startRoute = serializers.StringRelatedField()
     endRoute = serializers.StringRelatedField()
@@ -51,12 +51,12 @@ class CarDriverSerializer(serializers.ModelSerializer):
     
     
     class Meta:
-        model = CarDriver
-        fields = ('id','car_number','driver','number_of_seat', 'price_per_unit','is_available','startRoute','endRoute','date','time')
+        model = VanDriver
+        fields = ('id','van_number','driver','number_of_seat', 'price_per_unit','is_available','startRoute','endRoute','date','time')
         
         
 
-class CarDriverListSerializer(serializers.ModelSerializer):
+class VanDriverListSerializer(serializers.ModelSerializer):
         
     startRoute = serializers.PrimaryKeyRelatedField(queryset=Locations.objects.all(),source='startRoute.name')
     endRoute = serializers.PrimaryKeyRelatedField(queryset=Locations.objects.all(),source='endRoute.name')
@@ -64,8 +64,8 @@ class CarDriverListSerializer(serializers.ModelSerializer):
     driver = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(),source='driver.username')
     
     class Meta:
-        model = CarDriver
-        fields = ('id','car_number','driver','number_of_seat', 'price_per_unit','is_available','startRoute','endRoute','date','time')
+        model = VanDriver
+        fields = ('id','van_number','driver','number_of_seat', 'price_per_unit','is_available','startRoute','endRoute','date','time')
         
 
 
@@ -75,22 +75,22 @@ class ResponseDriverCarSerializer(serializers.ModelSerializer):
     endRoute = serializers.PrimaryKeyRelatedField(queryset=Locations.objects.all(),source='endRoute.name')
     
     class Meta:
-        model = CarDriver
-        fields = ('car_number','startRoute','endRoute','date','time')
+        model = VanDriver
+        fields = ('van_number','startRoute','endRoute','date','time')
 
 
        
-class CarReservationSerializer(serializers.ModelSerializer):
+class VanReservationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CarReservation
-        fields = ('number_of_ticket', 'user', 'car', 'number_of_seat', 'is_confirmed' )
+        model = VanReservation
+        fields = ('number_of_ticket', 'user', 'van', 'number_of_seat', 'is_confirmed' )
         read_only_fields = ('number_of_ticket', 'user')
 
         
-class CarReservationListSerializer(serializers.ModelSerializer):
+class VanReservationListSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(),source='user.username')
-    car = serializers.PrimaryKeyRelatedField(queryset=CarDriver.objects.all(),source='car.car_number') 
+    van = serializers.PrimaryKeyRelatedField(queryset=VanDriver.objects.all(),source='van.van_number') 
     class Meta:
-        model = CarReservation
-        fields = ('id','number_of_ticket', 'user', 'car', 'number_of_seat', 'is_confirmed' , 'amont_to_pay')
+        model = VanReservation
+        fields = ('id','number_of_ticket', 'user', 'van', 'number_of_seat', 'is_confirmed' , 'amount_to_pay')
                

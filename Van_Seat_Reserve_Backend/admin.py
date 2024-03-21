@@ -1,13 +1,10 @@
 from django.contrib import admin
-from .models import CustomUser , CarDriver , CarReservation , Locations
+from .models import CustomUser , VanDriver , VanReservation , Locations
 
 # Register your models here.
 
 admin.site.register(CustomUser)
-admin.site.register(CarDriver)
-admin.site.register(CarReservation)
+admin.site.register(VanDriver)
+admin.site.register(VanReservation)
 # admin.site.register(Payment)
 admin.site.register(Locations)
-
-
-

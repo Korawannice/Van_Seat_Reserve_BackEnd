@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('van_re', '0002_cardriver_endroute_cardriver_is_available_and_more'),
+        ('Van_Seat_Reserve_Backend', '0002_vandriver_endroute_vandriver_is_available_and_more'),
     ]
 
     operations = [

@@ -6,12 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('van_re', '0004_alter_customuser_managers_alter_carreservation_car_and_more'),
+        ('Van_Seat_Reserve_Backend', '0004_alter_customuser_managers_alter_vanreservation_van_and_more'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='carreservation',
+            model_name='vanreservation',
             name='number_of_ticket',
             field=models.CharField(max_length=10, unique=True),
         ),
